@@ -3,6 +3,7 @@
 
 
 type AuthPayload {
+  message: String
   token: String
   user: User
 }
@@ -31,6 +32,7 @@ type Mutation {
 type Query {
   allMessages: [Chat!]!
   allUsers: [User!]!
+  me: User!
 }
 
 enum Role {

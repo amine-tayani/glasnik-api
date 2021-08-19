@@ -24,6 +24,7 @@ const AuthPayload = objectType({
     t.field('user', {
       type: 'User',
     })
+    t.string('message')
   },
 })
 
