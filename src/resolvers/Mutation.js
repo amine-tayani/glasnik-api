@@ -1,8 +1,10 @@
 const { nonNull, stringArg, mutationType } = require('nexus')
-const bcrypt = require('bcrypt')
 const { ValidationError, AuthenticationError } = require('apollo-server')
-const jwt = require('jsonwebtoken')
-require('dotenv').config()
+const bcrypt = require('bcrypt')
+const crypto = require('crypto')
+const { sendMail, resetPasswordHtml } = require('../utils/sendMail')
+const { generateToken } = require('../utils/tokenFunctions')
+const { resetExpire } = require('../utils/dateUtil')
 
 const Mutation = mutationType({
   definition(t) {
@@ -31,19 +33,56 @@ const Mutation = mutationType({
           },
         })
 
-        const token = jwt.sign(
-          { id: createdAccount.id },
-          process.env.JWT_SECRET_KEY,
-          { expiresIn: '30d' },
-        )
-
         return {
           createdAccount,
-          token,
+          token: generateToken(createdAccount.id),
           message: 'account created successfully',
         }
       },
     }),
+      t.field('resetPassword', {
+        type: 'ResetResponse',
+        args: {
+          password: nonNull(stringArg()),
+          confirmPassword: nonNull(stringArg()),
+          resetToken: nonNull(stringArg()),
+        },
+        resolve: async (_parent, args, context) => {
+          if (args.password !== args.confirmPassword) {
+            throw new Error(`Your passwords don't match`)
+          }
+
+          const resetExp = resetExpire('s')
+          const user = await context.prisma.user.findFirst({
+            where: {
+              resetToken: args.resetToken,
+              resetTokenExpiry: {
+                gte: resetExp,
+              },
+            },
+          })
+          if (!user) {
+            throw new ValidationError(
+              'Your password reset token is either invalid or expired.',
+            )
+          }
+          const hash = await bcrypt.hash(args.password, 10)
+
+          const result = await context.prisma.user.update({
+            where: { id: user.id },
+            data: {
+              password: hash,
+              resetToken: null,
+              resetTokenExpiry: null,
+            },
+          })
+
+          return {
+            token: generateToken(result.id),
+            message: 'Password reset has been done successfully',
+          }
+        },
+      }),
       t.field('loginToAccount', {
         type: 'AuthPayload',
         args: {
@@ -65,10 +104,11 @@ const Mutation = mutationType({
           if (!isPasswordMatch) {
             throw new ValidationError('Provided password is invalid')
           }
-          const token = jwt.sign(
-            { userId: user.id },
-            process.env.JWT_SECRET_KEY,
+          context.pubsub.publish(
+            'USER_LOGGED_IN',
+            `${user.username} has logged in `,
           )
+          const token = generateToken(user.id)
 
           return {
             user,
@@ -77,6 +117,35 @@ const Mutation = mutationType({
           }
         },
       })
+    t.field('forgotPassword', {
+      type: 'ResponseMessage',
+      args: {
+        email: nonNull(stringArg()),
+      },
+      resolve: async (_parent, { email }, context) => {
+        const user = await context.prisma.user.findUnique({
+          where: { email },
+        })
+        if (!user) {
+          throw new AuthenticationError('No such user found with this email.')
+        }
+        const rt = crypto.randomBytes(32).toString('hex')
+        const resetExp = resetExpire('a')
+        await context.prisma.user.update({
+          where: { email },
+          data: { resetToken: rt, resetTokenExpiry: resetExp },
+        })
+
+        await sendMail(
+          email,
+          resetPasswordHtml(user.username, rt),
+          'Password Reset',
+        )
+        return {
+          message: `Please go to your  ${email} email and click the password reset link we've sent for your glasnik account`,
+        }
+      },
+    })
   },
 })
 

@@ -9,10 +9,21 @@ const User = objectType({
     t.nonNull.string('username')
     t.nonNull.string('email')
     t.nonNull.string('password')
+    t.boolean('isActive')
+    t.boolean('isBlocked')
+    t.string('resetToken')
+    t.date('resetTokenExpiry')
     t.date('createdAt')
     t.date('updateAt')
     t.field('role', {
       type: 'Role',
+    })
+    t.field('Channel', {
+      type: 'Channel',
+    })
+    t.string('channelId')
+    t.nonNull.list.nonNull.field('Message', {
+      type: 'Message',
     })
   },
 })
@@ -28,6 +39,20 @@ const AuthPayload = objectType({
   },
 })
 
+const ResponseMessage = objectType({
+  name: 'ResponseMessage',
+  definition(t) {
+    t.string('message')
+  },
+})
+const ResetResponse = objectType({
+  name: 'ResetResponse',
+  definition(t) {
+    t.string('token')
+    t.string('message')
+  },
+})
+
 const Role = enumType({
   name: 'Role',
   members: ['MOD', 'BOT', 'USER'],
@@ -37,4 +62,6 @@ module.exports = {
   AuthPayload,
   Role,
   DateTime,
+  ResponseMessage,
+  ResetResponse,
 }

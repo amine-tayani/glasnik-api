@@ -8,15 +8,14 @@ type AuthPayload {
   user: User
 }
 
-type Chat {
+type Channel {
   createdAt: DateTime
+  deletedAt: DateTime
   id: String!
-  message: String!
-  receiver: User
-  receiverId: String!
-  sender: User
-  senderId: String!
+  messages: [Message!]!
+  name: String!
   updateAt: DateTime
+  users: [User!]!
 }
 
 """
@@ -24,15 +23,36 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+type Message {
+  Channel: Channel!
+  channelId: String!
+  deletedAt: DateTime
+  id: String!
+  sender: User!
+  senderId: String!
+  text: String!
+  timestamp: DateTime
+  updateAt: DateTime
+}
+
 type Mutation {
   createAccount(email: String!, password: String!, username: String!): AuthPayload
+  forgotPassword(email: String!): ResponseMessage
   loginToAccount(email: String!, password: String!): AuthPayload
+  resetPassword(confirmPassword: String!, password: String!, resetToken: String!): ResetResponse
 }
 
 type Query {
-  allMessages: [Chat!]!
-  allUsers: [User!]!
   me: User!
+}
+
+type ResetResponse {
+  message: String
+  token: String
+}
+
+type ResponseMessage {
+  message: String
 }
 
 enum Role {
@@ -46,11 +66,22 @@ enum SortOrder {
   desc
 }
 
+type Subscription {
+  newUserLoggedIn: String
+}
+
 type User {
+  Channel: Channel
+  Message: [Message!]!
+  channelId: String
   createdAt: DateTime
   email: String!
   id: String!
+  isActive: Boolean
+  isBlocked: Boolean
   password: String!
+  resetToken: String
+  resetTokenExpiry: DateTime
   role: Role
   updateAt: DateTime
   username: String!
