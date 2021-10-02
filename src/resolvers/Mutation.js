@@ -1,7 +1,7 @@
-const { nonNull, stringArg, mutationType } = require('nexus')
-const { ValidationError, AuthenticationError } = require('apollo-server')
 const bcrypt = require('bcrypt')
 const crypto = require('crypto')
+const { nonNull, stringArg, mutationType } = require('nexus')
+const { ValidationError, AuthenticationError } = require('apollo-server')
 const { sendMail, resetPasswordHtml } = require('../utils/sendMail')
 const { generateToken } = require('../utils/tokenFunctions')
 const { resetExpire } = require('../utils/dateUtil')
@@ -9,6 +9,7 @@ const { resetExpire } = require('../utils/dateUtil')
 const Mutation = mutationType({
   definition(t) {
     t.field('createAccount', {
+      description: 'creating account mutation',
       type: 'AuthPayload',
       args: {
         username: nonNull(stringArg()),
@@ -41,6 +42,7 @@ const Mutation = mutationType({
       },
     }),
       t.field('resetPassword', {
+        description: 'reset password mutation',
         type: 'ResetResponse',
         args: {
           password: nonNull(stringArg()),
@@ -84,6 +86,7 @@ const Mutation = mutationType({
         },
       }),
       t.field('loginToAccount', {
+        description: 'login to account mutation',
         type: 'AuthPayload',
         args: {
           email: nonNull(stringArg()),
@@ -118,6 +121,7 @@ const Mutation = mutationType({
         },
       })
     t.field('forgotPassword', {
+      description: 'forgot password mutation',
       type: 'ResponseMessage',
       args: {
         email: nonNull(stringArg()),
@@ -145,7 +149,56 @@ const Mutation = mutationType({
           message: `Please go to your  ${email} email and click the password reset link we've sent for your glasnik account`,
         }
       },
-    })
+    }),
+      t.field('addChannel', {
+        description: 'mutation for adding a channel',
+        type: 'Channel',
+        args: {
+          name: nonNull(stringArg()),
+          category: nonNull(stringArg()),
+        },
+        resolve: async (_parent, args, context) => {
+          const existingChannel = await context.prisma.channel.findUnique({
+            where: {
+              name: args.name,
+            },
+          })
+          if (existingChannel) {
+            throw new ValidationError('channel already existed')
+          }
+          const createdChannel = await context.prisma.channel.create({
+            data: {
+              name: args.name,
+              category: args.category,
+            },
+          })
+          return {
+            createdChannel,
+          }
+        },
+      }),
+      t.field('addFriend', {
+        description: 'mutation for adding a friend',
+        type: 'User',
+        args: {
+          friendId: nonNull(stringArg()),
+        },
+        resolve: async (_parent, args, { prisma, userId }) => {
+          const updatedUser = await prisma.user.update({
+            where: {
+              id: userId,
+            },
+            data: {
+              friends: {
+                connect: { id: args.friendId },
+              },
+            },
+          })
+          return {
+            updatedUser,
+          }
+        },
+      })
   },
 })
 

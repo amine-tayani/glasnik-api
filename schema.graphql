@@ -8,7 +8,9 @@ type AuthPayload {
   user: User
 }
 
+"""the Channel type definition"""
 type Channel {
+  category: String!
   createdAt: DateTime
   deletedAt: DateTime
   id: String!
@@ -36,13 +38,28 @@ type Message {
 }
 
 type Mutation {
+  """mutation for adding a channel"""
+  addChannel(category: String!, name: String!): Channel
+
+  """mutation for adding a friend"""
+  addFriend(friendId: String!): User
+
+  """creating account mutation"""
   createAccount(email: String!, password: String!, username: String!): AuthPayload
+
+  """forgot password mutation"""
   forgotPassword(email: String!): ResponseMessage
+
+  """login to account mutation"""
   loginToAccount(email: String!, password: String!): AuthPayload
+
+  """reset password mutation"""
   resetPassword(confirmPassword: String!, password: String!, resetToken: String!): ResetResponse
 }
 
 type Query {
+  allChannels: [Channel]
+  allUsers: [User]
   me: User!
 }
 
@@ -72,14 +89,16 @@ type Subscription {
 
 type User {
   Channel: Channel
-  Message: [Message!]!
   channelId: String
   createdAt: DateTime
   email: String!
+  friends: [User]
   id: String!
   isActive: Boolean
   isBlocked: Boolean
+  messages: [Message]
   password: String!
+  photoUrl: String
   resetToken: String
   resetTokenExpiry: DateTime
   role: Role

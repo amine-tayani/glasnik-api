@@ -1,14 +1,14 @@
 const { objectType, asNexusMethod } = require('nexus')
 const { DateTimeResolver } = require('graphql-scalars')
-const { Message } = require('./Message')
-const { User } = require('./User')
 
 const DateTime = asNexusMethod(DateTimeResolver, 'date')
 const Channel = objectType({
   name: 'Channel',
+  description: 'the Channel type definition',
   definition(t) {
     t.nonNull.string('id')
     t.nonNull.string('name')
+    t.nonNull.string('category')
     t.date('createdAt')
     t.date('updateAt')
     t.date('deletedAt')

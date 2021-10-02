@@ -18,16 +18,19 @@ model User {
   email            String?   @unique @db.VarChar(255)
   password         String?   @db.VarChar(255)
   username         String?   @unique @db.VarChar(255)
+  photoUrl         String?   
   role             Role      @default(USER)
   resetToken       String?
-  resetTokenExpiry DateTime?  
+  resetTokenExpiry DateTime?
   isActive         Boolean?  @default(true)
   isBlocked        Boolean   @default(false)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @default(now()) @updatedAt
-  Channel          Channel?  @relation(fields: [channelId], references: [id])
+  channel          Channel?  @relation(fields: [channelId], references: [id])
   channelId        String?
-  Message          Message[]
+  messages         Message[]
+  friends  User[]  @relation("UserFriendsUser", references: [id])
+  friendOf User[]  @relation("UserFriendsUser", references: [id])
 }
 
 model Message {
@@ -39,12 +42,13 @@ model Message {
   channelId String?
   senderId  String
   sender    User     @relation(fields: [senderId], references: [id])
-  Channel   Channel? @relation(fields: [channelId], references: [id])
+  channel   Channel? @relation(fields: [channelId], references: [id])
 }
 
 model Channel {
   id        String    @id @default(uuid())
-  name      String?
+  name      String?   @unique
+  category  String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
   deletedAt DateTime  @default(now())

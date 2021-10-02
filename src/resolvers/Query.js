@@ -10,10 +10,51 @@ const Query = queryType({
         } else {
           return await prisma.user.findUnique({
             where: { id: userId },
+            select: {
+              id: true,
+              username: true,
+              email: true,
+              photoUrl: true,
+              friends: {
+                select: {
+                  id: true,
+                  username: true,
+                  email: true,
+                  photoUrl: true,
+                },
+              },
+            },
           })
         }
       },
-    })
+    }),
+      t.list.field('allChannels', {
+        type: 'Channel',
+        resolve: async (_parent, _args, { prisma }) => {
+          return await prisma.channel.findMany()
+        },
+      }),
+      t.list.field('allUsers', {
+        type: 'User',
+        resolve: async (_parent, _args, { prisma }) => {
+          return await prisma.user.findMany({
+            select: {
+              id: true,
+              username: true,
+              email: true,
+              photoUrl: true,
+              friends: {
+                select: {
+                  id: true,
+                  username: true,
+                  email: true,
+                  photoUrl: true,
+                },
+              },
+            },
+          })
+        },
+      })
   },
 })
 

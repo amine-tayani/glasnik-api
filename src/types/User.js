@@ -9,6 +9,7 @@ const User = objectType({
     t.nonNull.string('username')
     t.nonNull.string('email')
     t.nonNull.string('password')
+    t.string('photoUrl')
     t.boolean('isActive')
     t.boolean('isBlocked')
     t.string('resetToken')
@@ -22,8 +23,11 @@ const User = objectType({
       type: 'Channel',
     })
     t.string('channelId')
-    t.nonNull.list.nonNull.field('Message', {
+    t.list.field('messages', {
       type: 'Message',
+    })
+    t.list.field('friends', {
+      type: 'User',
     })
   },
 })
