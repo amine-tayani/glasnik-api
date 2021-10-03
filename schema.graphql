@@ -42,7 +42,7 @@ type Mutation {
   addChannel(category: String!, name: String!): Channel
 
   """mutation for adding a friend"""
-  addFriend(friendId: String!): User
+  addFriend(friendId: String!): ResponseMessage
 
   """creating account mutation"""
   createAccount(email: String!, password: String!, username: String!): AuthPayload

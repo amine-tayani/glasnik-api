@@ -179,7 +179,7 @@ const Mutation = mutationType({
       }),
       t.field('addFriend', {
         description: 'mutation for adding a friend',
-        type: 'User',
+        type: 'ResponseMessage',
         args: {
           friendId: nonNull(stringArg()),
         },
@@ -210,10 +210,10 @@ const Mutation = mutationType({
           })
           if (isFriendAlreadyExistInMyList) {
             throw new ValidationError(
-              `${isFriendAlreadyExistInMyList.username} is already exist in your friendlist`,
+              `${isFriendExist.username} is already exist in your friendlist`,
             )
           }
-          const updatedUser = await prisma.user.update({
+          await prisma.user.update({
             where: {
               id: userId,
             },
@@ -224,7 +224,7 @@ const Mutation = mutationType({
             },
           })
           return {
-            updatedUser,
+            message: 'friend added to the list',
           }
         },
       })

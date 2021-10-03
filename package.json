@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "graphql": "nodemon src/server.js",
+    "server": "nodemon src/server.js",
     "format": "prisma format"
   },
   "prettier": {
