@@ -53,6 +53,9 @@ type Mutation {
   """login to account mutation"""
   loginToAccount(email: String!, password: String!): AuthPayload
 
+  """mutation for removing a friend from a list"""
+  removeFriend(friendId: String!): ResponseMessage
+
   """reset password mutation"""
   resetPassword(confirmPassword: String!, password: String!, resetToken: String!): ResetResponse
 }

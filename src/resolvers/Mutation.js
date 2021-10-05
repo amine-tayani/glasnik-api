@@ -227,6 +227,28 @@ const Mutation = mutationType({
             message: 'friend added to the list',
           }
         },
+      }),
+      t.field('removeFriend', {
+        description: 'mutation for removing a friend from a list',
+        type: 'ResponseMessage',
+        args: {
+          friendId: nonNull(stringArg()),
+        },
+        resolve: async (_parent, { friendId }, { prisma, userId }) => {
+          await prisma.user.update({
+            where: {
+              id: userId,
+            },
+            data: {
+              friends: {
+                disconnect: [{ id: friendId }],
+              },
+            },
+          })
+          return {
+            message: 'friend removed from the list',
+          }
+        },
       })
   },
 })
