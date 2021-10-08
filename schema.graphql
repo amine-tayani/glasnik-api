@@ -95,6 +95,7 @@ type User {
   channelId: String
   createdAt: DateTime
   email: String!
+  friendOf: [User]
   friends: [User]
   id: String!
   isActive: Boolean

@@ -29,6 +29,9 @@ const User = objectType({
     t.list.field('friends', {
       type: 'User',
     })
+    t.list.field('friendOf', {
+      type: 'User',
+    })
   },
 })
 
