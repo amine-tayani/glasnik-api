@@ -2,9 +2,9 @@ const { objectType, asNexusMethod } = require('nexus')
 const { DateTimeResolver } = require('graphql-scalars')
 
 const DateTime = asNexusMethod(DateTimeResolver, 'date')
-const Channel = objectType({
-  name: 'Channel',
-  description: 'the Channel type definition',
+const Community = objectType({
+  name: 'Community',
+  description: 'the Community type definition',
   definition(t) {
     t.nonNull.string('id')
     t.nonNull.string('name')
@@ -22,6 +22,6 @@ const Channel = objectType({
 })
 
 module.exports = {
-  Channel,
+  Community,
   DateTime,
 }

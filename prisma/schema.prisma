@@ -12,6 +12,11 @@ enum Role {
   MOD
   BOT
 }
+enum CommunityType {
+  PRIVATE
+  PUBLIC
+  DUO
+}
 
 model User {
   id               String    @id @default(uuid())
@@ -26,8 +31,8 @@ model User {
   isBlocked        Boolean   @default(false)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @default(now()) @updatedAt
-  channel          Channel?  @relation(fields: [channelId], references: [id])
-  channelId        String?
+  communities      Community[]  @relation(fields: [communityId], references: [id])
+  communityId      String?
   messages         Message[]
   friends  User[]  @relation("UserFriendsUser", references: [id])
   friendOf User[]  @relation("UserFriendsUser", references: [id])
@@ -39,16 +44,17 @@ model Message {
   timestamp DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
   deletedAt DateTime @default(now())
-  channelId String?
+  communityId String?
   senderId  String
   sender    User     @relation(fields: [senderId], references: [id])
-  channel   Channel? @relation(fields: [channelId], references: [id])
+  community Community? @relation(fields: [communityId], references: [id])
 }
 
-model Channel {
+model Community {
   id        String    @id @default(uuid())
   name      String?   @unique
   category  String?
+  type      CommunityType?  @default(PUBLIC)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
   deletedAt DateTime  @default(now())

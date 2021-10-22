@@ -7,7 +7,7 @@ const {
   ResponseMessage,
   ResetResponse,
 } = require('./types/User')
-const { Channel } = require('./types/Channel')
+const { Community } = require('./types/Community')
 const { Message } = require('./types/Message')
 const { Mutation } = require('./resolvers/Mutation')
 const { Subscription } = require('./resolvers/Subscription')
@@ -28,7 +28,7 @@ const types = [
   ResetResponse,
   AuthPayload,
   Message,
-  Channel,
+  Community,
   SortOrder,
   Role,
   DateTime,
