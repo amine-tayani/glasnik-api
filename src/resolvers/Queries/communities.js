@@ -5,17 +5,9 @@ const communities = queryField('communities', {
   type: list('Community'),
   resolve: async (_parent, _args, { prisma }) => {
     const communities = await prisma.community.findMany({
-      select: {
-        id: true,
-        name: true,
-        category: true,
-        type: true,
-        users: {
-          select: {
-            username: true,
-            id: true,
-          },
-        },
+      include: {
+        users: true,
+        messages: true,
       },
     })
     return communities
@@ -29,17 +21,9 @@ const community = queryField('community', {
   resolve: async (_parent, { communityId }, { prisma }) => {
     return await prisma.community.findUnique({
       where: { id: communityId },
-      select: {
-        id: true,
-        name: true,
-        category: true,
-        type: true,
-        users: {
-          select: {
-            username: true,
-            id: true,
-          },
-        },
+      include: {
+        users: true,
+        messages: true,
       },
     })
   },

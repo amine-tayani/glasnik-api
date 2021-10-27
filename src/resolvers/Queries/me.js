@@ -8,27 +8,11 @@ const me = queryField('me', {
     } else {
       return await prisma.user.findUnique({
         where: { id: userId },
-        select: {
-          id: true,
-          username: true,
-          email: true,
-          photoUrl: true,
-          friends: {
-            select: {
-              id: true,
-              username: true,
-              email: true,
-              photoUrl: true,
-            },
-          },
-          friendOf: {
-            select: {
-              id: true,
-              username: true,
-              email: true,
-              photoUrl: true,
-            },
-          },
+        include: {
+          communities: true,
+          messages: true,
+          friends: true,
+          friendOf: true,
         },
       })
     }
