@@ -19,10 +19,10 @@ const User = objectType({
     t.field('role', {
       type: 'Role',
     })
-    t.field('Channel', {
-      type: 'Channel',
+    t.list.field('communities', {
+      type: 'Community',
     })
-    t.string('channelId')
+    t.string('communityId')
     t.list.field('messages', {
       type: 'Message',
     })
@@ -71,4 +71,5 @@ module.exports = {
   DateTime,
   ResponseMessage,
   ResetResponse,
+  DateTime,
 }

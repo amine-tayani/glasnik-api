@@ -1,4 +1,3 @@
-const { Query } = require('./resolvers/Query')
 const {
   User,
   DateTime,
@@ -7,10 +6,9 @@ const {
   ResponseMessage,
   ResetResponse,
 } = require('./types/User')
-const { Community } = require('./types/Community')
+const { Community, CommunityType } = require('./types/Community')
 const { Message } = require('./types/Message')
-const { Mutation } = require('./resolvers/Mutation')
-const { Subscription } = require('./resolvers/Subscription')
+const { resolvers } = require('./resolvers/index')
 const { enumType } = require('nexus')
 
 const SortOrder = enumType({
@@ -20,15 +18,14 @@ const SortOrder = enumType({
 
 const types = [
   SortOrder,
-  Query,
-  Mutation,
-  Subscription,
+  resolvers,
   User,
   ResponseMessage,
   ResetResponse,
   AuthPayload,
   Message,
   Community,
+  CommunityType,
   SortOrder,
   Role,
   DateTime,

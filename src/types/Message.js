@@ -23,5 +23,4 @@ const Message = objectType({
 
 module.exports = {
   Message,
-  DateTime,
 }

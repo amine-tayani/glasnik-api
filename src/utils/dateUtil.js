@@ -1,4 +1,4 @@
-function resetExpire(op) {
+const resetExpire = function (op) {
   let rte = new Date(Date.now())
   rte = new Date(rte)
   if (op === 'a') {

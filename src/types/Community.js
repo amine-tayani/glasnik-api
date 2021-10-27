@@ -1,4 +1,4 @@
-const { objectType, asNexusMethod } = require('nexus')
+const { objectType, enumType, asNexusMethod } = require('nexus')
 const { DateTimeResolver } = require('graphql-scalars')
 
 const DateTime = asNexusMethod(DateTimeResolver, 'date')
@@ -9,6 +9,9 @@ const Community = objectType({
     t.nonNull.string('id')
     t.nonNull.string('name')
     t.nonNull.string('category')
+    t.field('type', {
+      type: 'CommunityType',
+    })
     t.date('createdAt')
     t.date('updateAt')
     t.date('deletedAt')
@@ -21,7 +24,13 @@ const Community = objectType({
   },
 })
 
+const CommunityType = enumType({
+  name: 'CommunityType',
+  members: ['PRIVATE', 'PUBLIC', 'DUO'],
+})
+
 module.exports = {
   Community,
+  CommunityType,
   DateTime,
 }
