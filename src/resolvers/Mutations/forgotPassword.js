@@ -1,7 +1,7 @@
 const { nonNull, stringArg, mutationField } = require('nexus')
 const { resetPasswordHtml, sendMail } = require('../../utils/sendMail')
 const { resetExpire } = require('../../utils/dateUtil')
-const { AuthenticationError } = require('apollo-server')
+const { AuthenticationError } = require('apollo-server-express')
 const crypto = require('crypto')
 
 const forgotPassword = mutationField('forgotPassword', {

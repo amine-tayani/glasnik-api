@@ -1,5 +1,5 @@
 const { nonNull, stringArg, mutationField } = require('nexus')
-const { ValidationError } = require('apollo-server')
+const { ValidationError } = require('apollo-server-express')
 
 const addFriend = mutationField('addFriend', {
   description: 'mutation for adding a friend',

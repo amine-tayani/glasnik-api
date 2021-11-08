@@ -68,6 +68,9 @@ type Mutation {
 
   """reset password mutation"""
   resetPassword(confirmPassword: String!, password: String!, resetToken: String!): ResetResponse
+
+  """Mutation for file uploading (avatar) """
+  uploadAvatar(avatar: Upload): ResponseMessage
 }
 
 type Query {
@@ -103,6 +106,9 @@ enum SortOrder {
 type Subscription {
   newUserLoggedIn: User
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 type User {
   communities: [Community]

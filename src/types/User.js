@@ -1,7 +1,11 @@
 const { objectType, enumType, asNexusMethod } = require('nexus')
 const { DateTimeResolver } = require('graphql-scalars')
+const { GraphQLUpload } = require('graphql-upload')
 
 const DateTime = asNexusMethod(DateTimeResolver, 'date')
+
+// Upload Scalar type
+const Upload = asNexusMethod(GraphQLUpload, 'upload')
 const User = objectType({
   name: 'User',
   definition(t) {
@@ -67,6 +71,7 @@ const Role = enumType({
 module.exports = {
   User,
   AuthPayload,
+  Upload,
   Role,
   DateTime,
   ResponseMessage,

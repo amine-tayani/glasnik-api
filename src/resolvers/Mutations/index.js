@@ -6,9 +6,11 @@ const { addFriend } = require('./addFriend')
 const { removeFriend } = require('./removeFriend')
 const { createCommunity } = require('./createCommunity')
 const { joinCommunity } = require('./joinCommunity')
+const { uploadAvatar } = require('./uploadAvatar')
 
 const Mutation = [
   createAccount,
+  uploadAvatar,
   loginToAccount,
   forgotPassword,
   resetPassword,

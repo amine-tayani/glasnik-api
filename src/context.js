@@ -1,8 +1,9 @@
 const { PrismaClient } = require('@prisma/client')
-const prismaClient = new PrismaClient()
-const { PubSub } = require('apollo-server')
-require('dotenv').config()
+const { PubSub } = require('apollo-server-express')
 const { getUser } = require('./utils/tokenFunctions')
+
+require('dotenv').config()
+const prismaClient = new PrismaClient()
 const pubsub = new PubSub()
 
 const context = async ({ req }) => {

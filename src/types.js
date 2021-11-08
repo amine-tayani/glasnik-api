@@ -5,6 +5,7 @@ const {
   AuthPayload,
   ResponseMessage,
   ResetResponse,
+  Upload,
 } = require('./types/User')
 const { Community, CommunityType } = require('./types/Community')
 const { Message } = require('./types/Message')
@@ -19,6 +20,7 @@ const SortOrder = enumType({
 const types = [
   SortOrder,
   resolvers,
+  Upload,
   User,
   ResponseMessage,
   ResetResponse,

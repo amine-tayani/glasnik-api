@@ -1,7 +1,10 @@
 const { nonNull, stringArg, mutationField } = require('nexus')
 const bcrypt = require('bcrypt')
 const { generateToken } = require('../../utils/tokenFunctions')
-const { ValidationError, AuthenticationError } = require('apollo-server')
+const {
+  ValidationError,
+  AuthenticationError,
+} = require('apollo-server-express')
 
 const loginToAccount = mutationField('loginToAccount', {
   description: 'login to account mutation',

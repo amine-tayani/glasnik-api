@@ -1,4 +1,4 @@
-const { ValidationError } = require('apollo-server')
+const { ValidationError } = require('apollo-server-express')
 const { nonNull, stringArg, mutationField } = require('nexus')
 
 const createCommunity = mutationField('createCommunity', {
