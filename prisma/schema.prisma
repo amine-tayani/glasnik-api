@@ -55,6 +55,7 @@ model Community {
   id        String         @id @default(uuid())
   name      String?        @unique
   category  String?
+  thumbUrl  String?
   type      CommunityType? @default(PUBLIC)
   createdAt DateTime       @default(now())
   updatedAt DateTime       @default(now()) @updatedAt

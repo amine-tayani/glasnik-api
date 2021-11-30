@@ -25,7 +25,9 @@ const loginToAccount = mutationField('loginToAccount', {
     if (!isPasswordMatch) {
       throw new ValidationError('Provided password is invalid')
     }
-    context.pubsub.publish('USER_LOGGED_IN', `${user.username} has logged in `)
+    context.pubsub.publish('USER_LOGGED_IN', {
+      user: user,
+    })
     const token = generateToken(user.id)
 
     return {

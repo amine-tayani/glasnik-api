@@ -9,6 +9,7 @@ const Community = objectType({
     t.nonNull.string('id')
     t.nonNull.string('name')
     t.nonNull.string('category')
+    t.nonNull.string('thumbUrl')
     t.field('type', {
       type: 'CommunityType',
     })

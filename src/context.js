@@ -1,5 +1,5 @@
 const { PrismaClient } = require('@prisma/client')
-const { PubSub } = require('apollo-server-express')
+const { PubSub } = require('apollo-server')
 const { getUser } = require('./utils/tokenFunctions')
 
 require('dotenv').config()
@@ -8,7 +8,7 @@ const pubsub = new PubSub()
 
 const context = async ({ req }) => {
   let userId
-  const authorization = req.headers.authorization || ''
+  const authorization = req?.headers.authorization || ''
   if (authorization) {
     const token = authorization.replace('Bearer ', '')
     userId = getUser(token)

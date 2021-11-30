@@ -16,6 +16,7 @@ type Community {
   id: String!
   messages: [Message!]!
   name: String!
+  thumbUrl: String!
   type: CommunityType
   updateAt: DateTime
   users: [User!]!
@@ -52,7 +53,10 @@ type Mutation {
   createAccount(email: String!, password: String!, username: String!): AuthPayload
 
   """mutation for creating a new Community"""
-  createCommunity(category: String!, name: String!, type: CommunityType): Community
+  createCommunity(category: String!, name: String!, thumbUrl: Upload, type: CommunityType): Community
+
+  """mutation for creating a new Message"""
+  createMessage(communityId: String!, text: String!): Message
 
   """forgot password mutation"""
   forgotPassword(email: String!): ResponseMessage
@@ -79,6 +83,12 @@ type Query {
 
   """get a informations about a single community by id """
   community(communityId: String!): Community
+
+  """Get single message"""
+  getMessage(id: String!): Message
+
+  """get a informations about all messages in a community """
+  getMessages(communityId: String!): [Message]
   me: User
   users: [User]
 }
@@ -105,6 +115,9 @@ enum SortOrder {
 
 type Subscription {
   newUserLoggedIn: User
+
+  """subscription that listen for new messages"""
+  onMessage: Message
 }
 
 """The `Upload` scalar type represents a file upload."""

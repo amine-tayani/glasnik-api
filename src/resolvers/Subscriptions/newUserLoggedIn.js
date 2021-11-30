@@ -6,7 +6,7 @@ const newUserLoggedIn = subscriptionField('newUserLoggedIn', {
     return context.pubsub.asyncIterator('USER_LOGGED_IN')
   },
   resolve: (payload) => {
-    return payload
+    return payload.user
   },
 })
 module.exports = { newUserLoggedIn }

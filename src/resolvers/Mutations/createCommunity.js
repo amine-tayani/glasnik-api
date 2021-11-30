@@ -1,5 +1,6 @@
 const { ValidationError } = require('apollo-server-express')
-const { nonNull, stringArg, mutationField } = require('nexus')
+const { nonNull, stringArg, arg, mutationField } = require('nexus')
+const { uploadFile } = require('../../utils/cloudinary')
 
 const createCommunity = mutationField('createCommunity', {
   description: 'mutation for creating a new Community',
@@ -8,6 +9,7 @@ const createCommunity = mutationField('createCommunity', {
     name: nonNull(stringArg()),
     type: 'CommunityType',
     category: nonNull(stringArg()),
+    thumbUrl: arg({ type: 'Upload' }),
   },
   resolve: async (_parent, args, { userId, prisma }) => {
     const existingCommunity = await prisma.community.findUnique({
@@ -16,17 +18,19 @@ const createCommunity = mutationField('createCommunity', {
     if (existingCommunity) {
       throw new ValidationError('Community is already exists.')
     }
-    const createCommunity = await prisma.community.create({
+    const file = await uploadFile(args.thumbUrl)
+    const createdCommunity = await prisma.community.create({
       data: {
         name: args.name,
         type: args.type,
         category: args.category,
+        thumbUrl: file.secure_url,
         users: {
           connect: { id: userId },
         },
       },
     })
-    return createCommunity
+    return createdCommunity
   },
 })
 
