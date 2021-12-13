@@ -16,7 +16,7 @@ const createAccount = mutationField('createAccount', {
       where: { email: args.email },
     })
     if (existingAccount) {
-      throw new ValidationError('Email is already associated with another user')
+      throw new ValidationError('Account is already exists ')
     }
     const hashpass = await bcrypt.hash(args.password, 10)
     const createdAccount = await context.prisma.user.create({

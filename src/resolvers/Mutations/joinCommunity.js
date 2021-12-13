@@ -14,7 +14,7 @@ const joinCommunity = mutationField('joinCommunity', {
     const checkIfUserAlreadyExist = await prisma.community.findFirst({
       where: {
         users: {
-          some: {
+          every: {
             id: userId,
           },
         },

@@ -9,6 +9,11 @@ const communities = queryField('communities', {
         users: true,
         messages: true,
       },
+      where: {
+        type: {
+          in: ['PUBLIC'],
+        },
+      },
     })
     return communities
   },

@@ -18,12 +18,12 @@ const loginToAccount = mutationField('loginToAccount', {
       where: { email: args.email },
     })
     if (!user) {
-      throw new AuthenticationError('No such user found.')
+      throw new AuthenticationError('This account does not exist.')
     }
 
     const isPasswordMatch = await bcrypt.compare(args.password, user.password)
     if (!isPasswordMatch) {
-      throw new ValidationError('Provided password is invalid')
+      throw new ValidationError('Password is incorrect try again.')
     }
     context.pubsub.publish('USER_LOGGED_IN', {
       user: user,
