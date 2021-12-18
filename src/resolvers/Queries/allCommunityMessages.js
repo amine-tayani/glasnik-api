@@ -9,7 +9,7 @@ const getAllMessageofCommunity = queryField('getMessages', {
   resolve: async (_parent, { communityId }, { prisma }) => {
     const communityMessages = await prisma.message.findMany({
       where: { communityId },
-      orderBy: { timestamp: 'desc' },
+      orderBy: { timestamp: 'asc' },
       include: {
         sender: true,
         community: true,
