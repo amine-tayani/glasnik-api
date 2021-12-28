@@ -9,7 +9,7 @@ const joinCommunity = mutationField('joinCommunity', {
   },
   resolve: async (_parent, args, { prisma, userId }) => {
     const checkIfCommunityExists = await prisma.community.findUnique({
-      where: { name: args.name },
+      where: { name: args.name.trim() },
     })
     const checkIfUserAlreadyExist = await prisma.community.findFirst({
       where: {
@@ -28,7 +28,7 @@ const joinCommunity = mutationField('joinCommunity', {
     }
     await prisma.community.update({
       where: {
-        name: args.name,
+        name: args.name.trim(),
       },
       data: {
         users: {

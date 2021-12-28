@@ -13,16 +13,16 @@ const createAccount = mutationField('createAccount', {
   },
   resolve: async (_parent, args, context) => {
     const existingAccount = await context.prisma.user.findUnique({
-      where: { email: args.email },
+      where: { email: args.email.trim() },
     })
     if (existingAccount) {
-      throw new ValidationError('Account is already exists ')
+      throw new ValidationError('This Account is already exists ')
     }
     const hashpass = await bcrypt.hash(args.password, 10)
     const createdAccount = await context.prisma.user.create({
       data: {
-        username: args.username,
-        email: args.email,
+        username: args.username.trim(),
+        email: args.email.trim(),
         password: hashpass,
       },
     })
