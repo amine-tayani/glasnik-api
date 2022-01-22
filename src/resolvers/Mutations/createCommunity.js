@@ -9,7 +9,7 @@ const createCommunity = mutationField('createCommunity', {
     name: nonNull(stringArg()),
     type: 'CommunityType',
     category: nonNull(stringArg()),
-    thumbUrl: arg({ type: 'Upload' }),
+    icon: arg({ type: 'Upload' }),
   },
   resolve: async (_parent, args, { userId, prisma }) => {
     const existingCommunity = await prisma.community.findUnique({
@@ -18,17 +18,21 @@ const createCommunity = mutationField('createCommunity', {
     if (existingCommunity) {
       throw new ValidationError('Community is already exists.')
     }
-    const file = await uploadFile(args.thumbUrl)
+    const file = await uploadFile(args.icon)
     const createdCommunity = await prisma.community.create({
       data: {
         name: args.name.trim(),
         type: args.type,
         category: args.category.trim(),
-        thumbUrl: file.secure_url,
-        users: {
-          connect: { id: userId },
-        },
+        icon: file.secure_url,
+        users: { connect: { id: userId } },
+        owner_id: userId,
+        owner: true,
       },
+    })
+    await prisma.community.update({
+      data: { member_count: { increment: 1 } },
+      where: { id: createCommunity.id },
     })
     return createdCommunity
   },

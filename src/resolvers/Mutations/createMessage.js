@@ -6,6 +6,7 @@ const createMessage = mutationField('createMessage', {
   type: 'Message',
   args: {
     communityId: nonNull(stringArg()),
+    channelId: nonNull(stringArg()),
     text: nonNull(stringArg()),
   },
   resolve: async (_parent, args, { userId, prisma, pubsub }) => {
@@ -17,17 +18,11 @@ const createMessage = mutationField('createMessage', {
     const message = await prisma.message.create({
       data: {
         text: args.text,
-        sender: {
-          connect: {
-            id: userId,
-          },
-        },
+        sender: { connect: { id: userId } },
         community: { connect: { id: args.communityId } },
+        channel: { connect: { id: args.channelId } },
       },
-      include: {
-        sender: true,
-        community: true,
-      },
+      include: { sender: true, community: true, channel: true },
     })
 
     pubsub.publish(ON_MESSAGE, {

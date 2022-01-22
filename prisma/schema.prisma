@@ -19,16 +19,23 @@ enum CommunityType {
   DUO
 }
 
+enum ChannelMode {
+  TEXT
+  VOICE
+}
+
 model User {
   id               String      @id @default(uuid())
-  email            String?     @unique @db.VarChar(255)
-  password         String?     @db.VarChar(255)
-  username         String?     @unique @db.VarChar(255)
-  photoUrl         String?
+  email            String      @unique @db.VarChar(255)
+  password         String      @db.VarChar(255)
+  username         String      @unique @db.VarChar(255)
+  avatar           String?
+  banner           String?
   role             Role        @default(USER)
   resetToken       String?
   resetTokenExpiry DateTime?
   isActive         Boolean?    @default(true)
+  verified         Boolean?    @default(false)
   isBlocked        Boolean     @default(false)
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @default(now()) @updatedAt
@@ -37,6 +44,8 @@ model User {
   messages         Message[]
   friends          User[]      @relation("UserFriendsUser", references: [id])
   friendOf         User[]      @relation("UserFriendsUser", references: [id])
+  channel          Channel?    @relation(fields: [channelId], references: [id])
+  channelId        String?
 }
 
 model Message {
@@ -49,19 +58,41 @@ model Message {
   senderId    String
   sender      User       @relation(fields: [senderId], references: [id])
   community   Community? @relation(fields: [communityId], references: [id])
+  channel     Channel?   @relation(fields: [channelId], references: [id])
+  channelId   String?
 }
 
 model Community {
-  id        String         @id @default(uuid())
-  name      String?        @unique
-  category  String?
-  thumbUrl  String?
-  type      CommunityType? @default(PUBLIC)
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @default(now()) @updatedAt
-  deletedAt DateTime       @default(now())
-  messages  Message[]
-  users     User[]
+  id           String        @id @default(uuid())
+  name         String        @unique
+  category     String
+  icon         String?
+  banner       String?
+  description  String?
+  member_count Int           @default(0)
+  type         CommunityType @default(PUBLIC)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now()) @updatedAt
+  deletedAt    DateTime      @default(now())
+  owner        Boolean?      @default(false)
+  owner_id     String
+  messages     Message[]
+  users        User[]
+  channels     Channel[]
 }
 
-
+model Channel {
+  id            String       @id @default(uuid())
+  topic         String?      @unique
+  mode          ChannelMode?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now()) @updatedAt
+  deletedAt     DateTime     @default(now())
+  messages      Message[]
+  member_count  Int          @default(0) 
+  message_count Int          @default(0)
+  owner_id      String
+  communityId   String
+  recipients    User[]
+  community     Community    @relation(fields: [communityId], references: [id])
+}

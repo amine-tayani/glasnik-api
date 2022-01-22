@@ -1,0 +1,26 @@
+Server Model => Fields to add
+	=>	- change thumbUrl name to icon
+	=>  - add a Server Banner
+	=>	- owner -> User
+	=>	- owner_id -> foreign key
+	=> 	- Description
+	=> 	- MEMBER_COUNT = Integer
+
+Channel Model => Fields to add
+	=> - MESSAGE_COUNT = Integer
+	=> - MEMBER_COUNT  = Integer		
+
+User Model =>
+	=> - Banner	
+	=> - verified = Boolean	
+	
+
+Add new Model called Invite =>
+	=>	- code = String	
+	=>	- community = Community 	
+	=>	- channel = Channel	
+	=>	- Inviter = User who create the invite 	
+	=>	- Target = User that recieved the invite	
+	=>	- created_at = timestamp	
+	=> 	- expires_at = timestamp 
+	=>  - Pending = Boolean 	

@@ -8,6 +8,7 @@ const communities = queryField('communities', {
       include: {
         users: true,
         messages: true,
+        channels: true,
       },
       where: {
         type: {
@@ -29,6 +30,7 @@ const community = queryField('community', {
       include: {
         users: true,
         messages: true,
+        channels: true,
       },
     })
   },

@@ -1,8 +1,9 @@
 const { me } = require('./me')
 const { users } = require('./users')
 const { communities, community } = require('./communities')
-const { getAllMessageofCommunity } = require('./allCommunityMessages')
 const { getSingleMessage } = require('./getMessage')
+const { getAllMessageofCommunity } = require('./allCommunityMessages')
+const { getAllChannelMessages } = require('./channelMessages')
 
 const Query = [
   me,
@@ -10,6 +11,7 @@ const Query = [
   communities,
   community,
   getAllMessageofCommunity,
+  getAllChannelMessages,
   getSingleMessage,
 ]
 

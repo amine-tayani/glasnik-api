@@ -8,6 +8,8 @@ const { createCommunity } = require('./createCommunity')
 const { joinCommunity } = require('./joinCommunity')
 const { uploadAvatar } = require('./uploadAvatar')
 const { createMessage } = require('./createMessage')
+const { addChannel } = require('./createChannel')
+const { joinChannel } = require('./createInviteToChannel')
 
 const Mutation = [
   createAccount,
@@ -20,6 +22,8 @@ const Mutation = [
   removeFriend,
   createCommunity,
   joinCommunity,
+  addChannel,
+  joinChannel,
 ]
 
 module.exports = { Mutation }

@@ -10,14 +10,12 @@ const Message = objectType({
     t.date('timestamp')
     t.date('updateAt')
     t.date('deletedAt')
-    t.nonNull.string('communityId')
+    t.nonNull.field('sender', { type: 'User' })
     t.nonNull.string('senderId')
-    t.nonNull.field('sender', {
-      type: 'User',
-    })
-    t.nonNull.field('community', {
-      type: 'Community',
-    })
+    t.field('community', { type: 'Community' })
+    t.string('communityId')
+    t.field('channel', { type: 'Channel' })
+    t.string('channelId')
   },
 })
 

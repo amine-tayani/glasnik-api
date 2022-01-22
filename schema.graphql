@@ -8,15 +8,43 @@ type AuthPayload {
   user: User
 }
 
-"""the Community type definition"""
-type Community {
-  category: String!
+"""the Channel type definition"""
+type Channel {
+  community: Community!
+  communityId: String
   createdAt: DateTime
   deletedAt: DateTime
   id: String!
+  member_count: Int!
+  message_count: Int!
+  messages: [Message!]!
+  mode: ChannelMode
+  owner_id: String
+  recipients: [User!]!
+  topic: String!
+  updateAt: DateTime
+}
+
+enum ChannelMode {
+  TEXT
+  VOICE
+}
+
+"""the Community type definition"""
+type Community {
+  banner: String
+  category: String!
+  channels: [Channel]!
+  createdAt: DateTime
+  deletedAt: DateTime
+  description: String
+  icon: String!
+  id: String!
+  isOwner: Boolean
+  member_count: Int
   messages: [Message!]!
   name: String!
-  thumbUrl: String!
+  owner_id: String
   type: CommunityType
   updateAt: DateTime
   users: [User!]!
@@ -34,8 +62,10 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 scalar DateTime
 
 type Message {
-  community: Community!
-  communityId: String!
+  channel: Channel
+  channelId: String
+  community: Community
+  communityId: String
   deletedAt: DateTime
   id: String!
   sender: User!
@@ -46,6 +76,9 @@ type Message {
 }
 
 type Mutation {
+  """mutation for adding a new channel => voice OR text"""
+  addChannel(communityId: String, mode: ChannelMode, owner_id: String, topic: String!): Channel
+
   """mutation for adding a friend"""
   addFriend(friendId: String!): ResponseMessage
 
@@ -53,13 +86,16 @@ type Mutation {
   createAccount(email: String!, password: String!, username: String!): AuthPayload
 
   """mutation for creating a new Community"""
-  createCommunity(category: String!, name: String!, thumbUrl: Upload, type: CommunityType): Community
+  createCommunity(category: String!, icon: Upload, name: String!, type: CommunityType): Community
 
   """mutation for creating a new Message"""
-  createMessage(communityId: String!, text: String!): Message
+  createMessage(channelId: String!, communityId: String!, text: String!): Message
 
   """forgot password mutation"""
   forgotPassword(email: String!): ResponseMessage
+
+  """mutation for creating an invite to a Channel"""
+  joinChannel(name: String!): ResponseMessage
 
   """mutation for joining a Community"""
   joinCommunity(name: String!): ResponseMessage
@@ -84,7 +120,10 @@ type Query {
   """get a informations about a single community by id """
   community(communityId: String!): Community
 
-  """Get single message"""
+  """get a informations about all messages in a community """
+  getChannelMessages(channelId: String!): [Message]
+
+  """Get a single message"""
   getMessage(id: String!): Message
 
   """get a informations about all messages in a community """
@@ -124,6 +163,10 @@ type Subscription {
 scalar Upload
 
 type User {
+  avatar: String
+  banner: String
+  channel: Channel
+  channelId: String
   communities: [Community]
   communityId: String
   createdAt: DateTime
@@ -135,10 +178,10 @@ type User {
   isBlocked: Boolean
   messages: [Message]
   password: String!
-  photoUrl: String
   resetToken: String
   resetTokenExpiry: DateTime
   role: Role
   updateAt: DateTime
   username: String!
+  verified: Boolean
 }

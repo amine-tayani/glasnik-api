@@ -12,13 +12,7 @@ const joinCommunity = mutationField('joinCommunity', {
       where: { name: args.name.trim() },
     })
     const checkIfUserAlreadyExist = await prisma.community.findFirst({
-      where: {
-        users: {
-          every: {
-            id: userId,
-          },
-        },
-      },
+      where: { users: { every: { id: userId } } },
     })
     if (!checkIfCommunityExists) {
       throw new ValidationError('community does not exists.')
@@ -27,14 +21,11 @@ const joinCommunity = mutationField('joinCommunity', {
       throw new ValidationError('user already joined the community.')
     }
     await prisma.community.update({
-      where: {
-        name: args.name.trim(),
-      },
+      where: { name: args.name.trim() },
       data: {
         users: {
-          connect: {
-            id: userId,
-          },
+          connect: { id: userId },
+          member_count: { increment: 1 },
         },
       },
     })

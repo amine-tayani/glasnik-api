@@ -12,7 +12,7 @@ const uploadAvatar = mutationField('uploadAvatar', {
     await prisma.user.update({
       where: { id: userId },
       data: {
-        photoUrl: file.secure_url,
+        avatar: file.secure_url,
       },
     })
     return { message: 'Avatar has been uploaded' }

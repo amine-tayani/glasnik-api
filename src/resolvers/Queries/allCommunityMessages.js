@@ -13,6 +13,7 @@ const getAllMessageofCommunity = queryField('getMessages', {
       include: {
         sender: true,
         community: true,
+        channel: true,
       },
     })
     return communityMessages

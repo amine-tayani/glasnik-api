@@ -10,32 +10,26 @@ const User = objectType({
   name: 'User',
   definition(t) {
     t.nonNull.string('id')
-    t.nonNull.string('username')
     t.nonNull.string('email')
     t.nonNull.string('password')
-    t.string('photoUrl')
-    t.boolean('isActive')
-    t.boolean('isBlocked')
+    t.nonNull.string('username')
+    t.string('avatar')
+    t.string('banner')
+    t.field('role', { type: 'Role' })
     t.string('resetToken')
     t.date('resetTokenExpiry')
+    t.boolean('isActive')
+    t.boolean('verified')
+    t.boolean('isBlocked')
     t.date('createdAt')
     t.date('updateAt')
-    t.field('role', {
-      type: 'Role',
-    })
-    t.list.field('communities', {
-      type: 'Community',
-    })
+    t.list.field('communities', { type: 'Community' })
     t.string('communityId')
-    t.list.field('messages', {
-      type: 'Message',
-    })
-    t.list.field('friends', {
-      type: 'User',
-    })
-    t.list.field('friendOf', {
-      type: 'User',
-    })
+    t.list.field('messages', { type: 'Message' })
+    t.list.field('friends', { type: 'User' })
+    t.list.field('friendOf', { type: 'User' })
+    t.field('channel', { type: 'Channel' })
+    t.string('channelId')
   },
 })
 
@@ -43,9 +37,7 @@ const AuthPayload = objectType({
   name: 'AuthPayload',
   definition(t) {
     t.string('token')
-    t.field('user', {
-      type: 'User',
-    })
+    t.field('user', { type: 'User' })
     t.string('message')
   },
 })
