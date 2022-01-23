@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer')
-require('dotenv').config()
+const config = require('../../config/_conf')
 
 function resetPasswordHtml(username, resetToken) {
   return `
@@ -440,13 +440,13 @@ async function sendMail(to, html, subject) {
     port: 587,
     secure: false,
     auth: {
-      user: process.env.GLASNIK_ACTIVATION_EMAIL,
-      pass: process.env.GLASNIK_ACTIVATION_PASSWORD,
+      user: config.GLASNIK_ACTIVATION_EMAIL,
+      pass: config.GLASNIK_ACTIVATION_PASSWORD,
     },
   })
   transporter.sendMail(
     {
-      from: process.env.GLASNIK_ACTIVATION_EMAIL,
+      from: config.GLASNIK_ACTIVATION_EMAIL,
       to,
       subject,
       html,

@@ -1,5 +1,5 @@
 const cloudinary = require('cloudinary')
-require('dotenv').config()
+const config = require('../../config/_conf')
 
 async function uploadFile(file) {
   const { createReadStream } = await file
@@ -7,15 +7,15 @@ async function uploadFile(file) {
 
   // init cloudinary
   cloudinary.v2.config({
-    cloud_name: process.env.CLOUDINARY_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
+    cloud_name: config.CLOUDINARY_NAME,
+    api_key: config.CLOUDINARY_API_KEY,
+    api_secret: config.CLOUDINARY_API_SECRET,
   })
 
   return new Promise((resolve, reject) => {
     const cloudStream = cloudinary.v2.uploader.upload_stream(
       {
-        folder: process.env.CLOUDINARY_MEDIA_FOLDER,
+        folder: config.CLOUDINARY_MEDIA_FOLDER,
       },
       function (err, fileUploaded) {
         if (err) {
