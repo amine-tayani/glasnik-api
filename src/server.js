@@ -51,6 +51,6 @@ server.installSubscriptionHandlers(httpServer)
 httpServer.listen({ port }, () => {
   logger.log(
     'info',
-    `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`,
+    `🚀 Server ready at http://localhost:${port}${server.graphqlPath} in ${config.NODE_ENV}mode`,
   )
 })

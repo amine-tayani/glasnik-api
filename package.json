@@ -1,9 +1,11 @@
 {
   "name": "node-graphql",
   "version": "1.0.0",
-  "license": "MIT",
+  "license": "ISC",
+  "author": "Amine T",
   "scripts": {
-    "dev": "nodemon src/server.js",
+    "dev": "set NODE_ENV=development && nodemon src/server.js",
+    "prod": "set NODE_ENV=production && node src/server.js",
     "format": "npx prisma format"
   },
   "prettier": {
