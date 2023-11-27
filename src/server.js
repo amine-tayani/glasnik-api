@@ -10,17 +10,9 @@ const logger = require('../config/winston')
 const config = require('../config/_conf')
 
 const port = config.PORT
-var __prod__ = config.NODE_ENV === 'production'
-var __dev__ = config.NODE_ENV === 'development'
 
 const app = express()
 
-if (__dev__) {
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
-}
-if (__prod__) {
-  app.use(express.errorHandler())
-}
 app.use(cors())
 app.use(graphqlUploadExpress())
 app.use(compression())

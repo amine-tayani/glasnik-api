@@ -39,7 +39,7 @@ model User {
   isBlocked        Boolean     @default(false)
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @default(now()) @updatedAt
-  communities      Community[] @relation(fields: [communityId], references: [id])
+  communities      Community[] @relation("_CommunityToUser")
   communityId      String?
   messages         Message[]
   friends          User[]      @relation("UserFriendsUser", references: [id])
@@ -69,15 +69,16 @@ model Community {
   icon         String?
   banner       String?
   description  String?
-  member_count Int           @default(0)
+  member_count Int?           @default(0)
   type         CommunityType @default(PUBLIC)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now()) @updatedAt
   deletedAt    DateTime      @default(now())
   owner        Boolean?      @default(false)
-  owner_id     String
+  owner_id     String?
+  user_id      String?
   messages     Message[]
-  users        User[]
+  users        User[]        @relation("_CommunityToUser")
   channels     Channel[]
 }
 
@@ -89,7 +90,7 @@ model Channel {
   updatedAt     DateTime     @default(now()) @updatedAt
   deletedAt     DateTime     @default(now())
   messages      Message[]
-  member_count  Int          @default(0) 
+  member_count  Int          @default(0)
   message_count Int          @default(0)
   owner_id      String
   communityId   String

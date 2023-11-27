@@ -19,9 +19,9 @@ const Community = objectType({
     t.date('deletedAt')
     t.boolean('isOwner')
     t.string('owner_id')
-    t.nonNull.list.nonNull.field('messages', { type: 'Message' })
-    t.nonNull.list.nonNull.field('users', { type: 'User' })
-    t.nonNull.list.field('channels', { type: 'Channel' })
+    t.list.nonNull.field('messages', { type: 'Message' })
+    t.list.nonNull.field('users', { type: 'User' })
+    t.list.field('channels', { type: 'Channel' })
   },
 })
 
